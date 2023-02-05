@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _=require("lodash");
+var path = require('path');
 const https=require("https");
 const mongoose = require("mongoose");  //require mongoose
 mongoose.set('strictQuery', true); //related to mongoose idk
