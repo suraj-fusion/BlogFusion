@@ -8,6 +8,7 @@ const ejs = require("ejs");
 
 const _=require("lodash");
 
+require('dotenv').config()
 var path = require('path');  //doubt
 
 
@@ -35,8 +36,9 @@ app.use(express.static(__dirname+"/public")); //setting up express so that it re
 
 app.set('views', path.join(__dirname, 'views')); //doubt
 
+console.log
 // creating a new database in mongodb using mongoose
-mongoose.connect("mongodb+srv://suraj-fusion:surajraj@cluster0.z5cqkyz.mongodb.net/BlogDB?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });   //The useNewUrlParser and useUnifiedTopology options are required to prevent deprecation warnings and to ensure that Mongoose uses the new connection logic introduced in MongoDB 3.0.
+mongoose.connect(process.env.MONGODB_KEY, { useNewUrlParser: true, useUnifiedTopology: true });   //The useNewUrlParser and useUnifiedTopology options are required to prevent deprecation warnings and to ensure that Mongoose uses the new connection logic introduced in MongoDB 3.0.
 
 //creating a schema 
 const postsSchema={
@@ -99,6 +101,16 @@ app.get("/about",function(req,res){
 app.get("/contact",function(req,res){
   res.render("contact",{contactContent:contactContentApp});
 });
+
+
+
+
+app.get("/login",function(req,res){
+
+  res.render("login");
+
+});
+
 
 
 
