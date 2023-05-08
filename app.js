@@ -1,29 +1,42 @@
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const ejs = require("ejs");
-const _=require("lodash");
-var path = require('path');
-const https=require("https");
-const mongoose = require("mongoose");  //require mongoose
-mongoose.set('strictQuery', true); //related to mongoose idk
+//constants for importing Required modules and setting up different modules for use
+const express = require("express");    
 
-const homeStartingContentApp = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
-const aboutContentApp = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
-const contactContentApp = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
+const bodyParser = require("body-parser"); 
+
+const ejs = require("ejs");
+
+const _=require("lodash");
+
+var path = require('path');  //doubt
+
+
+const mongoose = require("mongoose");
+
+mongoose.set('strictQuery', true);  //ensures all queries are valid that means that all queries are in accordance with the defined Schema  
+
+
+
+//Default content on different pages
+
+const homeStartingContentApp = "Hello Fellow Earthlings,Fusion this side...Welcome to BlogFusion where you can find blogs written specially by me Feel free to check them out...Peace Out";
+const aboutContentApp = "Well Too bad You dont me guess what You get to know I am suraj Raj from ranchi jharkhand a passionate tech enthusiast";
+const contactContentApp = "E mail me at surajrajgp@gmail.com";
 
 // const postsApp=[];
 
-const app = express();
+const app = express();   //creates app using express
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs'); //setting up EJS.The viewengine component is set to render HTML from ejs templates files with .ejs extension inside views directory
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(__dirname+"/public"));
-app.set('views', path.join(__dirname, 'views'));
+app.use(bodyParser.urlencoded({extended: true})); //setting up body-parser.Through urlencoded method POST and PUT requests can be parsed.Setting extended to true means that it can parse nested objects and arrays as well rather than just simple key value pairs
+
+app.use(express.static(__dirname+"/public")); //setting up express so that it recognises public as the directory name for static files.We use _dirname when hosting on vercel because in vercel we have to specify full path
+
+app.set('views', path.join(__dirname, 'views')); //doubt
 
 // creating a new database in mongodb using mongoose
-mongoose.connect("mongodb+srv://suraj-fusion:surajraj@cluster0.z5cqkyz.mongodb.net/BlogDB?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://suraj-fusion:surajraj@cluster0.z5cqkyz.mongodb.net/BlogDB?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });   //The useNewUrlParser and useUnifiedTopology options are required to prevent deprecation warnings and to ensure that Mongoose uses the new connection logic introduced in MongoDB 3.0.
 
 //creating a schema 
 const postsSchema={
@@ -48,7 +61,9 @@ const posts=mongoose.model("post",postsSchema); // the passed argument string ge
 
 
 
-// -----------------------------------------------------------------------PATHS(ROUTES)------------------------------------------------------------------------
+// -----------------------------------------------------------------------ROUTES------------------------------------------------------------------------
+
+//route to home (default route)
 app.get("/",function(req,res){
 
 
@@ -59,7 +74,7 @@ app.get("/",function(req,res){
     console.log("Error");
    }
    else{
-    res.render("home",{homeStartingContent:homeStartingContentApp,posts:founditems}); //the default path set for render is directory/views
+    res.render("home",{homeStartingContent:homeStartingContentApp,posts:founditems}); //to pass data from backend(app.js) to frontend(home.ejs) we use JSON object 
    }
 
  });
@@ -68,32 +83,50 @@ app.get("/",function(req,res){
 
 });
 
+
+
+
+
+//get route to about page
 app.get("/about",function(req,res){
   res.render("about",{aboutContent:aboutContentApp});
 });
 
+
+
+
+//get route to contact page
 app.get("/contact",function(req,res){
   res.render("contact",{contactContent:contactContentApp});
 });
 
 
+
+
+
+//get route to compose page
 app.get("/compose",function(req,res){
   res.render("compose");
 });
 
 
+
+
+
+//post route to compose page
 app.post("/compose",function(req,res){
 
-  //  const post={ postTitleApp:req.body.postTitle,postContentApp:req.body.postContent };
-  //  postsApp.push(post);
-
-  const post1=new posts({
+  
+  //creating an instance (object) of posts collection
+  const post1=new posts({              
     title:req.body.postTitle,
     content:req.body.postContent
   });
   postarr=[];
-
+  
+  //pushing that object into an array
   postarr.push(post1);
+  //inserting that array into posts collection using insertMany method another way to do it would be to use create method
   posts.insertMany(postarr,function(err){
     if(err){
       console.log("error");
@@ -106,23 +139,19 @@ app.post("/compose",function(req,res){
   });
 
   
-  
-  
-
-  
    res.redirect("/");
 
 
 });
 
+
+//get route to specific posts
 app.get("/posts/:path",function(req,res){
 
 
    let path=req.params.path;
-   console.log(path);
-
   
-  posts.find({_id:path},function(err,founditems){
+  posts.find({_id:path},function(err,founditems){   //finding the specific post accordint to id and passing  that over to post ejs to be rendered
        
            if(err)
            {
@@ -141,11 +170,7 @@ app.get("/posts/:path",function(req,res){
 
 
 
-
-
-
-
-
+//setting up server to listem on port 3000
 app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
