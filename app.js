@@ -20,8 +20,8 @@ mongoose.set('strictQuery', true);  //ensures all queries are valid that means t
 
 //Default content on different pages
 
-const homeStartingContentApp = "Hello Fellow Earthlings...,Suraj this side,Welcome to BlogFusion where you can find blogs written specially by me on various topics i find interesting and worth sharing.Feel free to check them out..Peace Out!";
-const aboutContentApp = "Well Too bad You dont me!Guess what?...... you get to!.I am Suraj Raj A passionate Computer Science Student and and aspiring full Stack developer 😁";
+const homeStartingContentApp = "Hello Fellow Earthlings..., Suraj this side , Welcome to BlogFusion where you can find blogs written specially by me on various topics i find interesting and worth sharing.Feel free to check them out..Peace Out!";
+const aboutContentApp = "I am Suraj Raj A passionate Computer Science Student and and aspiring full Stack developer 😁.I have always been a student and learner at heart currently pursuing my bachelor's in CSE from ITER bhubaneshwar";
 const contactContentApp = "E mail me at surajrajgp@gmail.com";
 
 // const postsApp=[];
