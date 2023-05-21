@@ -36,7 +36,16 @@ app.use(express.static(__dirname+"/public")); //setting up express so that it re
 
 app.set('views', path.join(__dirname, 'views')); //doubt
 
-console.log
+
+const bcrypt=require("bcrypt");  //requiring bcrypt
+const saltRounds=10;          //adding salt rounds
+
+
+
+
+
+
+
 // creating a new database in mongodb using mongoose
 mongoose.connect(process.env.MONGODB_KEY, { useNewUrlParser: true, useUnifiedTopology: true });   //The useNewUrlParser and useUnifiedTopology options are required to prevent deprecation warnings and to ensure that Mongoose uses the new connection logic introduced in MongoDB 3.0.
 
@@ -53,11 +62,33 @@ const posts=mongoose.model("post",postsSchema); // the passed argument string ge
 
 
 
+const userSchema= new mongoose.Schema({    //have to create proper mongoose schema to encrypt it 
+  email:String,
+  password:String
+});
+
+const users = new mongoose.model("user",userSchema);  // creating a model using the schema the passed argument users gets automatically converted to users
 
 
 
+//code to register myself
+// bcrypt.hash(<my password>, saltRounds, function(err, hash) {
+//   const newUser=new users({
+//       email:"surajrajgp@gmail.com",
+//       password:hash
+//   })
 
 
+//   newUser.save(function(err){
+//       if(err)
+//       {
+//           console.log(err);
+//       }
+//       else{
+//          console.log("successfully registered");
+//       }
+//   });
+// });
 
 
 
@@ -108,6 +139,42 @@ app.get("/contact",function(req,res){
 app.get("/login",function(req,res){
 
   res.render("login");
+  
+});
+
+app.post("/login",function(req,res){
+  
+    //checking if user exists in the data base is yes rendering compose webpage
+    const email=req.body.email;
+    const password=req.body.password;
+
+    users.findOne({email:email},function(err,userfound){
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            if(userfound){
+              
+                bcrypt.compare(password, userfound.password, function(err, result) {
+                    if(result==true)
+                    {
+                        res.render("compose");
+                    }
+                    else
+                    {
+                      res.render("wrong_password");
+                    }
+                });
+            }
+            else
+            {
+              res.render("wrong_user");
+            }
+            
+        }
+    });
 
 });
 
@@ -118,7 +185,7 @@ app.get("/login",function(req,res){
 
 //get route to compose page
 app.get("/compose",function(req,res){
-  res.render("compose");
+  res.redirect("/login");
 });
 
 
