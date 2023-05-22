@@ -37,14 +37,7 @@ app.use(express.static(__dirname+"/public")); //setting up express so that it re
 app.set('views', path.join(__dirname, 'views')); //doubt
 
 
-try{
-const bcrypt=require('bcrypt'); 
-}
-catch(error)
-{
-  console.log(error);
-} //requiring bcrypt
-const saltRounds=10;          //adding salt rounds
+const md5 = require("md5");    //requiring md5
 
 
 
@@ -68,33 +61,32 @@ const posts=mongoose.model("post",postsSchema); // the passed argument string ge
 
 
 
-// const userSchema= new mongoose.Schema({    //have to create proper mongoose schema to encrypt it 
-//   email:String,
-//   password:String
-// });
+const userSchema= new mongoose.Schema({    //have to create proper mongoose schema to encrypt it 
+  email:String,
+  password:String
+});
 
-// const users = new mongoose.model("user",userSchema);  // creating a model using the schema the passed argument users gets automatically converted to users
+const users = new mongoose.model("user",userSchema);  // creating a model using the schema the passed argument users gets automatically converted to users
 
 
 
 //code to register myself
-// bcrypt.hash(<my password>, saltRounds, function(err, hash) {
-//   const newUser=new users({
-//       email:"surajrajgp@gmail.com",
-//       password:hash
-//   })
 
+  // const newUser=new users({
+  //     email:"surajrajgp@gmail.com",
+  //     password:md5("Jio@5g")    //creating hash using md5
+  // });
+ 
+  // newUser.save(function(err){
+  //     if(err)
+  //     {
+  //         console.log(err);
+  //     }
+  //     else{
+  //        console.log("successfully registered");
+  //     }
+  // });
 
-//   newUser.save(function(err){
-//       if(err)
-//       {
-//           console.log(err);
-//       }
-//       else{
-//          console.log("successfully registered");
-//       }
-//   });
-// });
 
 
 
@@ -152,44 +144,37 @@ app.post("/login",function(req,res){
   
     //checking if user exists in the data base is yes rendering compose webpage
     const email=req.body.email;
-    const password=req.body.password;
+    const password=md5(req.body.password);  //recreating the same hash(if correct password is entered) 
 
-    // users.findOne({email:email},function(err,userfound){
-    //     if(err)
-    //     {
-    //         console.log(err);
-    //     }
-    //     else
-    //     {
-    //         if(userfound){
+    users.findOne({email:email},function(err,userfound){
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            if(userfound){
               
-    //             bcrypt.compare(password, userfound.password, function(err, result) {
-    //               if(err)
-    //               {
-    //                 console.log("error");
-    //               }
-    //               else  if(result==true)
-    //                 {
-    //                     res.render("compose");
-    //                 }
-    //                 else
-    //                 {
-    //                   res.render("wrong_password");
-    //                 }
-    //             });
-    //         }
-    //         else
-    //         {
-    //           res.render("wrong_user");
-    //         }
+              if(userfound.password==password){   // comparing if entered password gives equal hash or not for loggin in
+                
+                console.log("logged in"); 
+                res.render("compose");
+              }
+              else
+              {
+                res.render("wrong_password");
+              }
+             
+            }
+            else
+            {
+              res.render("wrong_user");
+            }
             
-    //     }
-    // });
+        }
+    });
 
-    if(password=="123")
-    {
-      res.render("compose");
-    }
+    
 
 });
 
