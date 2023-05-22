@@ -37,7 +37,13 @@ app.use(express.static(__dirname+"/public")); //setting up express so that it re
 app.set('views', path.join(__dirname, 'views')); //doubt
 
 
-const bcrypt=require('bcrypt');  //requiring bcrypt
+try{
+const bcrypt=require('bcrypt'); 
+}
+catch(error)
+{
+  console.log(error);
+} //requiring bcrypt
 const saltRounds=10;          //adding salt rounds
 
 
