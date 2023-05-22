@@ -74,7 +74,7 @@ const users = new mongoose.model("user",userSchema);  // creating a model using 
 
   // const newUser=new users({
   //     email:"surajrajgp@gmail.com",
-  //     password:md5("Jio@5g")    //creating hash using md5
+  //     password:md5(<my pasword>)    //creating hash using md5
   // });
  
   // newUser.save(function(err){
