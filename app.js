@@ -37,8 +37,8 @@ app.use(express.static(__dirname+"/public")); //setting up express so that it re
 app.set('views', path.join(__dirname, 'views')); //doubt
 
 
-const bcrypt=require("bcrypt");  //requiring bcrypt
-const saltRounds=10;          //adding salt rounds
+// const bcrypt=require("bcrypt");  //requiring bcrypt
+// const saltRounds=10;          //adding salt rounds
 
 
 
@@ -62,12 +62,12 @@ const posts=mongoose.model("post",postsSchema); // the passed argument string ge
 
 
 
-const userSchema= new mongoose.Schema({    //have to create proper mongoose schema to encrypt it 
-  email:String,
-  password:String
-});
+// const userSchema= new mongoose.Schema({    //have to create proper mongoose schema to encrypt it 
+//   email:String,
+//   password:String
+// });
 
-const users = new mongoose.model("user",userSchema);  // creating a model using the schema the passed argument users gets automatically converted to users
+// const users = new mongoose.model("user",userSchema);  // creating a model using the schema the passed argument users gets automatically converted to users
 
 
 
@@ -148,33 +148,42 @@ app.post("/login",function(req,res){
     const email=req.body.email;
     const password=req.body.password;
 
-    users.findOne({email:email},function(err,userfound){
-        if(err)
-        {
-            console.log(err);
-        }
-        else
-        {
-            if(userfound){
+    // users.findOne({email:email},function(err,userfound){
+    //     if(err)
+    //     {
+    //         console.log(err);
+    //     }
+    //     else
+    //     {
+    //         if(userfound){
               
-                bcrypt.compare(password, userfound.password, function(err, result) {
-                    if(result==true)
-                    {
-                        res.render("compose");
-                    }
-                    else
-                    {
-                      res.render("wrong_password");
-                    }
-                });
-            }
-            else
-            {
-              res.render("wrong_user");
-            }
+    //             bcrypt.compare(password, userfound.password, function(err, result) {
+    //               if(err)
+    //               {
+    //                 console.log("error");
+    //               }
+    //               else  if(result==true)
+    //                 {
+    //                     res.render("compose");
+    //                 }
+    //                 else
+    //                 {
+    //                   res.render("wrong_password");
+    //                 }
+    //             });
+    //         }
+    //         else
+    //         {
+    //           res.render("wrong_user");
+    //         }
             
-        }
-    });
+    //     }
+    // });
+
+    if(password=="123")
+    {
+      res.render("compose");
+    }
 
 });
 
@@ -250,6 +259,6 @@ app.get("/posts/:path",function(req,res){
 
 
 //setting up server to listem on port 3000
-app.listen(process.env.PORT ||3000, function() {
+app.listen(3000, function() {
   console.log("Server started ");
 });
