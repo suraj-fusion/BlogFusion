@@ -9,7 +9,7 @@ const ejs = require("ejs");
 const _=require("lodash");
 
 require('dotenv').config()
-var path = require('path');  //doubt
+var path = require('path');  
 
 
 const mongoose = require("mongoose");
@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({extended: true})); //setting up body-parser.Throu
 
 app.use(express.static(__dirname+"/public")); //setting up express so that it recognises public as the directory name for static files.We use _dirname when hosting on vercel because in vercel we have to specify full path
 
-app.set('views', path.join(__dirname, 'views')); //doubt
+app.set('views', path.join(__dirname, 'views')); 
 
 
 const md5 = require("md5");    //requiring md5
